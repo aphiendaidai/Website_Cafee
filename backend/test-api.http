@@ -1,0 +1,91 @@
+### Test API Endpoints
+
+### 1. Đăng ký User thường
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "user1",
+  "password": "password123",
+  "email": "user1@example.com"
+}
+
+### 2. Đăng ký Admin
+POST http://localhost:8080/api/auth/register-admin
+Content-Type: application/json
+
+{
+  "username": "admin1",
+  "password": "password123",
+  "email": "admin1@example.com"
+}
+
+### 3. Đăng nhập User
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "user1",
+  "password": "password123"
+}
+
+### 4. Đăng nhập Admin
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin1",
+  "password": "password123"
+}
+
+### 5. Test User Profile (cần JWT token)
+GET http://localhost:8080/api/user/profile
+Authorization: Bearer {{userToken}}
+
+### 6. Test User Dashboard (cần JWT token)
+GET http://localhost:8080/api/user/dashboard
+Authorization: Bearer {{userToken}}
+
+### 7. Test Admin Dashboard (cần JWT token của admin)
+GET http://localhost:8080/api/admin/dashboard
+Authorization: Bearer {{adminToken}}
+
+### 8. Test Admin Users (cần JWT token của admin)
+GET http://localhost:8080/api/admin/users
+Authorization: Bearer {{adminToken}}
+
+### 9. Test Menu Items (public endpoint)
+GET http://localhost:8080/api/menu/items
+
+### 10. Test Orders API (cần JWT token)
+# Test authentication
+GET http://localhost:8080/api/orders/test-auth
+Authorization: Bearer {{userToken}}
+
+# Tạo order mới
+POST http://localhost:8080/api/orders
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "itemId": 1,
+  "size": "medium",
+  "shippingAddress": "123 Đường ABC, Quận 1, TP.HCM",
+  "phoneNumber": "0123456789"
+}
+
+# Lấy danh sách orders của user
+GET http://localhost:8080/api/orders/user
+Authorization: Bearer {{userToken}}
+
+# Lấy tất cả orders (admin only)
+GET http://localhost:8080/api/orders
+Authorization: Bearer {{adminToken}}
+
+# Cập nhật status order
+PUT http://localhost:8080/api/orders/1/status?status=SHIPPING
+Authorization: Bearer {{adminToken}}
+
+### Variables (sử dụng trong VS Code REST Client extension):
+# userToken: JWT token từ đăng nhập user
+# adminToken: JWT token từ đăng nhập admin

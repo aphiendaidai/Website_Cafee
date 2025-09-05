@@ -1,0 +1,16 @@
+### Test OAuth2 Google Login Flow
+
+# 1. Bắt đầu OAuth2 flow
+GET http://localhost:8080/oauth2/authorize/google
+
+# 2. Sau khi Google redirect về, kiểm tra callback URL
+GET http://localhost:8080/login/oauth2/code/google?state=test&code=test
+
+# 3. Kiểm tra xem có endpoint nào khác không
+GET http://localhost:8080/api/auth/status
+
+# 4. Kiểm tra CORS
+OPTIONS http://localhost:8080/oauth2/authorize/google
+Origin: http://localhost:3000
+Access-Control-Request-Method: GET
+Access-Control-Request-Headers: Content-Type

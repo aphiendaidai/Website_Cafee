@@ -1,0 +1,85 @@
+package com.webdemo.backend;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+
+import com.webdemo.backend.model.User;
+
+public class UserPrincipal implements OAuth2User, UserDetails {
+    private User user;
+    private Map<String, Object> attributes;
+
+    public UserPrincipal(User user) {
+        this.user = user;
+    }
+
+    public UserPrincipal(User user, Map<String, Object> attributes) {
+        this.user = user;
+        this.attributes = attributes;
+    }
+
+    public static UserPrincipal create(User user) {
+        return new UserPrincipal(user);
+    }
+
+    public static UserPrincipal create(User user, Map<String, Object> attributes) {
+        return new UserPrincipal(user, attributes);
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    @Override
+    public String getPassword() {
+        return user.getPassword();
+    }
+
+    @Override
+    public String getUsername() {
+        return user.getUsername();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return user.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
+
+    @Override
+    public String getName() {
+        return String.valueOf(user.getId());
+    }
+}
